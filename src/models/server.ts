@@ -1,6 +1,8 @@
 import express, { Application } from 'express';
 import connection from '../database/connection';
 import routesProducts from '../routes/product.routes';
+import routesDefault from '../routes/default.routes';
+import routesUsers from '../routes/user.routes';
 
 class Server {
     private app: Application;
@@ -11,6 +13,7 @@ class Server {
         this.port = process.env.PORT || '3000';
         this.listen();
         this.connectDB();
+        this.midlewares();
         this.routes();
     }
 
@@ -28,7 +31,13 @@ class Server {
     }
 
     routes () {
+        this.app.use("/", routesDefault);
         this.app.use("/api/products", routesProducts)
+        this.app.use("/api/users", routesUsers)
+    }
+
+    midlewares () {
+        this.app.use(express.json());
     }
 }
 
